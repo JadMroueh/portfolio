@@ -16,6 +16,10 @@ web development during my internship and freelance work.
 
 To prepare for this assignment, I looked at:
 
+- https://diogotc.com/ — a developer portfolio that uses a timeline format to show career growth
+- https://andrevv.com/ — a minimalist portfolio that strips everything back to just the work
+- https://www.alexnaraghi.com/ — a clean centered portfolio that leads with a bold headline and a project grid
+
 ## 3. Portfolio Sites That Inspired Me
 
 Portfolio site 1: https://diogotc.com/
@@ -36,26 +40,36 @@ https://ubiquitous-meringue-5d0865.netlify.app/
 
 ## 5. Link to My Bootstrap Code
 
-Code link: [add GitHub repository link here]
+Code link: https://github.com/JadMroueh/portfolio
 
 ## 6. Design Choices
 
 ### Colors
 
-I chose dark teal, white, light grey, and soft accent colors. The dark teal gives the portfolio a calm and organized look. The white and light grey backgrounds make the text easy to read. The accent colors help the project cards look different from each other.
+I chose dark navy as the base and used shades of orange and blue as accent colors. The background is a deep navy (#0d1b2a) with a subtle gradient, and sections use a slightly lighter navy (#112030) so the page has clear divisions. I chose navy because it feels professional and modern.
+
+For the orange side I used two shades: amber (#e8a020) for the navbar border, the profile photo ring, the hero subtitle, and the first project card, and a darker burnt orange (#d4741a) for the second project card. This gives the orange tones some range instead of repeating the same shade.
+
+For the blue side I used two shades: steel blue (#4a90c4) for the timeline year labels, the timeline border lines, and the third project card, and a lighter sky blue (#60b8e8) for the about section info box border and the fourth project card. The outline button also turns sky blue on hover.
+
+Using two shades of orange and two shades of blue keeps the palette cohesive while giving each section and card its own accent without repeating colors.
 
 ### Typography
 
-I used Arial because it is simple, readable, and available on most computers. I made the main heading large so the user notices my name first. I used smaller headings for the sections so the page has a clear visual hierarchy.
+I used Arial because it is simple, readable, and available on most computers. I made the main heading very large so the user notices my name first. The subtitle below the name is smaller and uses letter spacing to look like a label. Section headings are a bit smaller than the main heading so the page has a clear visual hierarchy. I also used smaller text for the timeline descriptions and card text to show that those are supporting details.
 
 ### Screen Layout
 
-The page uses a top navigation bar, a large introduction area, an about section, a work section, and a case study section.
+The page uses a top navigation bar, a centered hero section, an about section, a timeline section, and a case study section.
 
-Scale is used by making the main name much larger than the rest of the text.
+The navigation bar is inspired by andrevv.com, which only shows the name and a few links. I kept my navbar simple with just three links so it does not distract from the content.
 
-Visual hierarchy is used with headings, spacing, and buttons.
+The hero section is inspired by alexnaraghi.com. Instead of splitting text and an image side by side, I centered everything so the name is the first thing the user sees. Scale is used by making the name very large compared to the subtitle.
 
-Balance is used by placing text on one side and the profile image on the other side in the header.
+The timeline section is inspired by diogotc.com, which shows the creator's progression over time. I added a simple timeline with years on the left and descriptions on the right. This helps the user understand who I am and where I have been, not just what I built.
 
-Contrast is used with dark text on light backgrounds and white text on the dark header.
+Visual hierarchy is created using heading sizes, spacing, and text color. Important text is dark and large. Supporting text is smaller and grey.
+
+Balance is created by centering the hero and using a two-column layout in the about section.
+
+Contrast is used with light text on dark navy backgrounds, and with bright orange and blue accents against the dark sections so the important elements stand out.
