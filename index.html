@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My UI Design Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">My Portfolio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainMenu">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Me</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#work">How I Work</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects">Case Studies</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <p class="small-heading">SEG3125 Portfolio</p>
+                    <h1>Jad Mroueh</h1>
+                    <p class="lead">Software Engineering CO-OP student learning how to design clear and useful user interfaces.</p>
+                    <a href="#projects" class="btn btn-light">View my future projects</a>
+                </div>
+                <div class="col-md-5 text-center">
+                    <img class="profile-image" src="https://placehold.co/420x420/d9f0ee/173b3f?text=Jad+Mroueh" alt="Jad Mroueh placeholder profile image">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="page-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h2>About Me</h2>
+                        <p>
+                            My name is Jad Mroueh. I am a Software Engineering CO-OP student at the
+                            University of Ottawa. I am taking SEG3125 because I want to learn how to make
+                            websites that are easy to understand and pleasant to use.
+                        </p>
+                        <p>
+                            I like simple designs, organized layouts, and websites that do not make users guess
+                            what to do next. I also enjoy building web and mobile apps with React, React Native,
+                            JavaScript, TypeScript, Python, Java, C#, and SQL.
+                        </p>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="info-box">
+                            <h3>Quick Info</h3>
+                            <p><strong>Program:</strong> Software Engineering CO-OP</p>
+                            <p><strong>Course:</strong> SEG3125</p>
+                            <p><strong>Interest:</strong> UI design and full-stack development</p>
+                            <p><strong>Email:</strong> jmrou009@uottawa.ca</p>
+                            <p><strong>LinkedIn:</strong> linkedin.com/in/jmroueh</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="work" class="page-section grey-section">
+            <div class="container">
+                <h2>How I Work</h2>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3>1. Learn</h3>
+                        <p>I start by reading the assignment, checking the requirements, and looking at examples.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>2. Sketch</h3>
+                        <p>I plan the main sections first so the page has a clear structure before I start coding.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>3. Build</h3>
+                        <p>I use HTML, CSS, JavaScript, and Bootstrap to create a working version that I can improve.</p>
+                    </div>
+                </div>
+                <p class="mt-4">
+                    I have experience building web and mobile applications, but I am still learning user
+                    interface design. Right now I am practicing visual hierarchy, contrast, balance, and layout.
+                    I will add more design process details later in the semester.
+                </p>
+                <button class="btn btn-dark" onclick="showMessage()">My design goal</button>
+            </div>
+        </section>
+
+        <section id="projects" class="page-section">
+            <div class="container">
+                <h2>Future Case Studies</h2>
+                <p>These four projects will be completed later in the semester. For now, each one links to a hold page.</p>
+
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card project-card">
+                            <a href="service.html">
+                                <img src="https://placehold.co/600x420/bdd7e7/183247?text=Service+Site" class="card-img-top" alt="Service site preview">
+                            </a>
+                            <div class="card-body">
+                                <h3 class="card-title">Service Site</h3>
+                                <p class="card-text">A future website for a local service business.</p>
+                                <a href="service.html" class="btn btn-outline-dark">Open</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card project-card">
+                            <a href="memory.html">
+                                <img src="https://placehold.co/600x420/f6d6ad/442b12?text=Memory+Game" class="card-img-top" alt="Memory game preview">
+                            </a>
+                            <div class="card-body">
+                                <h3 class="card-title">Memory Game</h3>
+                                <p class="card-text">A future interface for a memory card game.</p>
+                                <a href="memory.html" class="btn btn-outline-dark">Open</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card project-card">
+                            <a href="ecommerce.html">
+                                <img src="https://placehold.co/600x420/e6d5f7/302149?text=E-commerce" class="card-img-top" alt="E-commerce site preview">
+                            </a>
+                            <div class="card-body">
+                                <h3 class="card-title">E-commerce Site</h3>
+                                <p class="card-text">A future shopping website with products.</p>
+                                <a href="ecommerce.html" class="btn btn-outline-dark">Open</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card project-card">
+                            <a href="analytics.html">
+                                <img src="https://placehold.co/600x420/cbe8c8/193b22?text=Analytics+Site" class="card-img-top" alt="Analytics site preview">
+                            </a>
+                            <div class="card-body">
+                                <h3 class="card-title">Analytics Site</h3>
+                                <p class="card-text">A future dashboard with charts and data.</p>
+                                <a href="analytics.html" class="btn btn-outline-dark">Open</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Created for SEG3125 - Assignment 1</p>
+            <p id="yearText"></p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
