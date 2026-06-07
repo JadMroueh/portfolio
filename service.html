@@ -3,20 +3,336 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Service Site - Coming Soon</title>
+    <title>Serenity Wellness Spa — Ottawa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="service-styles.css">
 </head>
 <body>
-    <main class="hold-page">
+
+    <!-- ============================================================
+         NAVBAR
+    ============================================================ -->
+    <nav class="navbar navbar-expand-lg svc-navbar">
         <div class="container">
-            <div class="hold-box">
-                <h1>Service Site</h1>
-                <p class="lead">Coming soon.</p>
-                <p>This page will later link to my service website design.</p>
-                <a href="index.html" class="btn btn-dark">Back to portfolio</a>
+            <a class="navbar-brand svc-brand" href="index.html">
+                <span class="brand-leaf">&#10022;</span> Serenity
+            </a>
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#svcMenu"
+                    aria-controls="svcMenu"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="svcMenu">
+                <ul class="navbar-nav ms-auto me-3">
+                    <li class="nav-item">
+                        <a class="nav-link svc-nav-link" href="#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link svc-nav-link" href="#bookingSection">Book</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link svc-nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link svc-nav-link" href="index.html">&#8592; Portfolio</a>
+                    </li>
+                </ul>
+                <a href="#bookingSection" class="btn btn-teal">Book Now</a>
             </div>
         </div>
-    </main>
+    </nav>
+
+    <!-- ============================================================
+         HERO
+    ============================================================ -->
+    <header class="svc-hero">
+        <div class="container">
+            <p class="hero-tag">Massage &amp; Wellness &middot; Ottawa, ON</p>
+            <h1 class="hero-title">Serenity Wellness Spa</h1>
+            <p class="hero-sub">
+                Expert massage therapy in a calm, welcoming environment.
+                Book your session online in minutes.
+            </p>
+            <a href="#services" class="btn btn-outline-teal me-2">View Services</a>
+            <a href="#bookingSection" class="btn btn-teal">Book an Appointment</a>
+        </div>
+    </header>
+
+    <!-- ============================================================
+         SERVICES
+    ============================================================ -->
+    <section id="services" class="svc-section">
+        <div class="container">
+            <h2 class="svc-heading">Our Services</h2>
+            <p class="svc-intro">
+                All sessions include a short health consultation and aftercare advice.
+                Prices include HST.
+            </p>
+            <!-- Service cards are populated by service-script.js -->
+            <div class="row g-4" id="servicesContainer"></div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         WHY CHOOSE US
+    ============================================================ -->
+    <section class="svc-section svc-dark-section">
+        <div class="container">
+            <h2 class="svc-heading">Why Choose Us</h2>
+            <div class="row g-4 mt-2">
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">&#127775;</div>
+                        <h3>Licensed Therapists</h3>
+                        <p>
+                            All our therapists are Registered Massage Therapists (RMT)
+                            with 5+ years of clinical experience.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">&#127807;</div>
+                        <h3>Calm Environment</h3>
+                        <p>
+                            Our spa is designed to help you disconnect from stress
+                            the moment you walk through the door.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">&#128197;</div>
+                        <h3>Easy Online Booking</h3>
+                        <p>
+                            Reserve your session in under two minutes —
+                            pick a service, choose a time, and you are done.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         BOOKING SECTION
+    ============================================================ -->
+    <section id="bookingSection" class="svc-section">
+        <div class="container">
+            <h2 class="svc-heading">Book an Appointment</h2>
+            <p class="svc-intro">Follow the three steps below to reserve your session.</p>
+
+            <!-- Step progress indicators -->
+            <div class="step-indicators">
+                <div class="step-indicator" id="indicator1">
+                    <span class="step-num">1</span>
+                    <span class="step-label">Service</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="indicator2">
+                    <span class="step-num">2</span>
+                    <span class="step-label">Date &amp; Time</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="indicator3">
+                    <span class="step-num">3</span>
+                    <span class="step-label">Your Info</span>
+                </div>
+            </div>
+
+            <div class="booking-box">
+
+                <!-- STEP 1 — Choose a service -->
+                <div id="step1">
+                    <h3 class="step-title">Step 1 &mdash; Choose a Service</h3>
+
+                    <div class="mb-3">
+                        <label for="serviceSelect" class="svc-label">Service</label>
+                        <select class="form-select svc-select" id="serviceSelect">
+                            <option value="">&#8212; Select a service &#8212;</option>
+                        </select>
+                    </div>
+
+                    <div id="step1Error" class="svc-error" style="display: none;"></div>
+
+                    <div class="mt-4">
+                        <button class="btn btn-teal" onclick="nextStep()">Continue &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2 — Pick a date and time -->
+                <div id="step2" style="display: none;">
+                    <h3 class="step-title">Step 2 &mdash; Pick a Date &amp; Time</h3>
+
+                    <div class="mb-4">
+                        <label for="dateInput" class="svc-label">Date</label>
+                        <input type="date" class="form-control svc-input" id="dateInput">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="svc-label">Available Time Slots</label>
+                        <!-- Time slot buttons are rendered by service-script.js -->
+                        <div id="timeSlotsContainer" class="time-slots-grid"></div>
+                    </div>
+
+                    <div id="step2Error" class="svc-error" style="display: none;"></div>
+
+                    <div class="mt-4 d-flex gap-3 flex-wrap">
+                        <button class="btn btn-outline-teal" onclick="prevStep()">&larr; Back</button>
+                        <button class="btn btn-teal" onclick="nextStep()">Continue &rarr;</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3 — Personal information -->
+                <div id="step3" style="display: none;">
+                    <h3 class="step-title">Step 3 &mdash; Your Information</h3>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nameInput" class="svc-label">Full Name *</label>
+                            <input type="text" class="form-control svc-input" id="nameInput"
+                                   placeholder="Jane Smith">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="emailInput" class="svc-label">Email Address *</label>
+                            <input type="email" class="form-control svc-input" id="emailInput"
+                                   placeholder="jane@email.com">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="phoneInput" class="svc-label">Phone Number (optional)</label>
+                            <input type="tel" class="form-control svc-input" id="phoneInput"
+                                   placeholder="(613) 555-1234">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="notesInput" class="svc-label">Notes (optional)</label>
+                            <textarea class="form-control svc-input" id="notesInput" rows="3"
+                                      placeholder="Any health concerns, preferences, or questions..."></textarea>
+                        </div>
+                    </div>
+
+                    <div id="step3Error" class="svc-error" style="display: none;"></div>
+
+                    <div class="mt-4 d-flex gap-3 flex-wrap">
+                        <button class="btn btn-outline-teal" onclick="prevStep()">&larr; Back</button>
+                        <button class="btn btn-teal" onclick="submitBooking()">Confirm Booking</button>
+                    </div>
+                </div>
+
+                <!-- STEP 4 — Confirmation -->
+                <div id="step4" style="display: none;">
+                    <div class="confirm-box">
+                        <div class="confirm-check">&#10003;</div>
+                        <h3>Appointment Confirmed!</h3>
+                        <p>We will send a reminder to your email 24 hours before your session.</p>
+                    </div>
+
+                    <div class="confirm-details">
+                        <div class="confirm-row">
+                            <span class="confirm-label">Service</span>
+                            <span id="confirmService" class="confirm-value"></span>
+                        </div>
+                        <div class="confirm-row">
+                            <span class="confirm-label">Date</span>
+                            <span id="confirmDate" class="confirm-value"></span>
+                        </div>
+                        <div class="confirm-row">
+                            <span class="confirm-label">Time</span>
+                            <span id="confirmTime" class="confirm-value"></span>
+                        </div>
+                        <div class="confirm-row">
+                            <span class="confirm-label">Name</span>
+                            <span id="confirmName" class="confirm-value"></span>
+                        </div>
+                        <div class="confirm-row">
+                            <span class="confirm-label">Email</span>
+                            <span id="confirmEmail" class="confirm-value"></span>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-outline-teal" onclick="resetBooking()">
+                            Book Another Appointment
+                        </button>
+                    </div>
+                </div>
+
+            </div><!-- end booking-box -->
+        </div>
+    </section>
+
+    <!-- ============================================================
+         CONTACT & LOCATION
+    ============================================================ -->
+    <section id="contact" class="svc-section svc-dark-section">
+        <div class="container">
+            <h2 class="svc-heading">Contact &amp; Location</h2>
+
+            <div class="row mt-4 g-4">
+                <div class="col-md-4">
+                    <div class="contact-item">
+                        <div class="contact-icon">&#128205;</div>
+                        <h3>Address</h3>
+                        <p>245 Rideau Street, Suite 3</p>
+                        <p>Ottawa, ON &nbsp; K1N 5Y7</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-item">
+                        <div class="contact-icon">&#128222;</div>
+                        <h3>Phone</h3>
+                        <p>(613) 555-0178</p>
+                        <p class="contact-note">Mon &ndash; Sat, 9 AM &ndash; 6 PM</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="contact-item">
+                        <div class="contact-icon">&#9993;</div>
+                        <h3>Email</h3>
+                        <p>hello@serenityspa.ca</p>
+                        <p class="contact-note">We reply within 24 hours</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hours-box">
+                <h3>Business Hours</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>Monday &ndash; Friday: 9:00 AM &ndash; 7:00 PM</p>
+                        <p>Saturday: 9:00 AM &ndash; 5:00 PM</p>
+                        <p>Sunday: Closed</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>Walk-ins welcome based on availability.</p>
+                        <p>Appointments recommended.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ============================================================
+         FOOTER
+    ============================================================ -->
+    <footer class="svc-footer">
+        <div class="container">
+            <p>Serenity Wellness Spa &mdash; 245 Rideau Street, Ottawa, ON</p>
+            <p>
+                Designed by <a href="index.html">Jad Mroueh</a>
+                &mdash; SEG3125 Assignment 2
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="service-script.js"></script>
 </body>
 </html>
