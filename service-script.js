@@ -1,6 +1,6 @@
 // ============================================================
-// Serenity Wellness Spa — service-script.js
-// SEG3125 Assignment 2 — Jad Mroueh (300425804)
+// Serenity Wellness Spa - service-script.js
+// SEG3125 Assignment 2 - Jad Mroueh (300425804)
 // ============================================================
 
 // Services offered by the spa
@@ -103,7 +103,7 @@ function populateServiceDropdown() {
         var s = services[i];
         var option = document.createElement("option");
         option.value = s.id;
-        option.textContent = s.name + " (" + s.duration + ")  —  " + s.price;
+        option.textContent = s.name + " (" + s.duration + ")  -  " + s.price;
         select.appendChild(option);
     }
 }
@@ -155,7 +155,7 @@ function renderTimeSlots() {
     container.innerHTML = html;
 }
 
-// Handle a time slot click — visually select it and store the value
+// Handle a time slot click - visually select it and store the value
 function selectTime(time) {
     selectedTime = time;
 
@@ -226,7 +226,7 @@ function submitBooking() {
     hideError("step3Error");
 
     // Populate the confirmation summary
-    document.getElementById("confirmService").textContent = selectedService.name + " — " + selectedService.duration + " — " + selectedService.price;
+    document.getElementById("confirmService").textContent = selectedService.name + ", " + selectedService.duration + ", " + selectedService.price;
     document.getElementById("confirmDate").textContent = formatDate(selectedDate);
     document.getElementById("confirmTime").textContent = selectedTime;
     document.getElementById("confirmName").textContent = name;

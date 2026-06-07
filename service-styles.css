@@ -349,6 +349,12 @@ h2, h3 {
     border: 1px solid #1e3a50;
     color: #d0dde8;
     font-size: 15px;
+    color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+    cursor: pointer;
 }
 
 .svc-select:focus,
