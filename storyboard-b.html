@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Storyboard B - Robert - MindMatch</title>
+    <style>
+        /* Storyboard B: calm teal theme, desktop landscape windows, stats-focused, click + keyboard */
+        :root {
+            --teal: #0f766e;
+            --teal-light: #5eead4;
+            --sand: #f8faf9;
+            --ink: #14302c;
+            --slate: #5b7a74;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            background: linear-gradient(160deg, #0b3a35 0%, #07221f 100%);
+            color: #e6f5f1;
+            padding: 36px 18px 60px;
+        }
+        .head { max-width: 1120px; margin: 0 auto 24px; }
+        .kicker { color: var(--teal-light); font-weight: bold; letter-spacing: 2px; font-size: 13px; text-transform: uppercase; margin: 14px 0 6px; }
+        h1 { font-size: 32px; margin: 0 0 10px; color: #fff; }
+        .back { color: var(--teal-light); text-decoration: none; font-size: 14px; }
+        .back:hover { color: #fff; }
+        .persona {
+            background: rgba(15,118,110,.18);
+            border: 1px solid rgba(94,234,212,.35);
+            padding: 18px 22px;
+            max-width: 1120px;
+            margin: 0 auto 34px;
+            font-size: 15px;
+            line-height: 1.6;
+            font-family: Georgia, serif;
+        }
+        .persona b { color: var(--teal-light); }
+
+        .frames { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px; }
+        .frame .step {
+            font-size: 13px; color: var(--teal-light); font-weight: bold; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 10px; font-family: Verdana, sans-serif;
+        }
+        .window {
+            background: var(--sand);
+            color: var(--ink);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 16px 36px rgba(0,0,0,.4);
+        }
+        .titlebar {
+            background: #e2ece9; padding: 9px 14px; display: flex; align-items: center; gap: 7px;
+            border-bottom: 1px solid #cfe0db;
+        }
+        .dot { width: 11px; height: 11px; border-radius: 50%; background: #b6ccc6; }
+        .urlbar { margin-left: 10px; font-family: Verdana, sans-serif; font-size: 12px; color: #5b7a74; }
+        .screen { padding: 24px 28px; display: flex; gap: 26px; }
+        .screen.center { display: block; text-align: center; }
+
+        .col-main { flex: 1.6; }
+        .col-side { flex: 1; }
+        h2.s { font-size: 24px; color: var(--teal); margin: 0 0 4px; }
+        .s-sub { font-size: 14px; color: var(--slate); margin: 0 0 18px; font-family: Verdana, sans-serif; }
+
+        .seg { font-family: Verdana, sans-serif; }
+        .seg-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--slate); font-weight: bold; margin: 16px 0 8px; }
+        .choices { display: flex; gap: 10px; flex-wrap: wrap; }
+        .choice {
+            border: 2px solid #cfe0db; background: #fff; border-radius: 6px;
+            padding: 12px 18px; font-size: 15px; font-weight: bold; color: var(--teal); cursor: default;
+        }
+        .choice.on { background: var(--teal); color: #fff; border-color: var(--teal); }
+        .start {
+            margin-top: 22px; background: var(--teal); color: #fff; border: none; border-radius: 6px;
+            padding: 14px 34px; font-size: 16px; font-weight: bold; font-family: Verdana, sans-serif;
+        }
+        .help {
+            background: #effaf7; border-left: 4px solid var(--teal-light); padding: 14px 16px;
+            font-size: 14px; color: #2c5650; font-family: Verdana, sans-serif; line-height: 1.5;
+        }
+
+        .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .bc {
+            aspect-ratio: 1/1; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; background: var(--teal); color: #fff; border: 2px solid #0b5b54;
+        }
+        .bc.up { background: #fff; border: 2px solid #cfe0db; color: var(--ink); }
+        .bc.hit { background: #d9f5ee; border: 2px solid var(--teal-light); }
+        .panel {
+            background: #fff; border: 1px solid #d7e6e2; border-radius: 8px; padding: 18px; font-family: Verdana, sans-serif;
+        }
+        .stat-line { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eef4f2; font-size: 15px; }
+        .stat-line:last-child { border-bottom: none; }
+        .stat-line .v { font-weight: bold; color: var(--teal); }
+        .progress-track { height: 12px; background: #e2ece9; border-radius: 6px; overflow: hidden; margin: 14px 0 6px; }
+        .progress-fill { height: 100%; width: 50%; background: var(--teal); }
+        .feedback { margin-top: 14px; background: #d9f5ee; color: #14302c; padding: 10px 14px; border-radius: 6px; font-size: 14px; }
+
+        .trophy { font-size: 54px; }
+        .end-stats { display: flex; justify-content: center; gap: 40px; margin: 18px 0; font-family: Verdana, sans-serif; }
+        .end-stats .ev { font-size: 30px; font-weight: bold; color: var(--teal); }
+        .end-stats .el { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--slate); }
+        .trend { font-family: Verdana, sans-serif; font-size: 14px; color: #2c5650; background: #effaf7; padding: 12px; border-radius: 6px; display: inline-block; }
+
+        @media (max-width: 760px) { .screen { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <div class="head">
+        <a class="back" href="index.html">&larr; Back to portfolio</a>
+        <p class="kicker">Storyboard B</p>
+        <h1>Robert trains his memory on his laptop</h1>
+    </div>
+
+    <div class="persona">
+        <b>Persona: Robert, 64, retired teacher.</b> Patient, methodical, health-conscious. He uses a laptop daily for email
+        and news but avoids cluttered apps. Comfortable with technology at a steady pace, interested in keeping his memory sharp.
+        <b>Goal:</b> run a calm daily memory exercise and see whether his score improves over time. <br>
+        <b>Theme of this storyboard:</b> calm teal on a light background, wide desktop window, large square cards, a side panel
+        with progress and clear guidance, click or keyboard to play.
+    </div>
+
+    <div class="frames">
+        <!-- Step 1 -->
+        <div class="frame">
+            <div class="step">1 . Choose difficulty and theme</div>
+            <div class="window">
+                <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar">mindmatch . set up your session</span></div>
+                <div class="screen">
+                    <div class="col-main seg">
+                        <h2 class="s">Set up your session</h2>
+                        <p class="s-sub">Choose a level and a card theme. Take your time, nothing is timed until you press start.</p>
+                        <div class="seg-label">Difficulty level</div>
+                        <div class="choices">
+                            <span class="choice">Beginner</span>
+                            <span class="choice on">Skilled</span>
+                            <span class="choice">Expert</span>
+                        </div>
+                        <div class="seg-label">Card theme</div>
+                        <div class="choices">
+                            <span class="choice on">Animals</span>
+                            <span class="choice">Fruits</span>
+                            <span class="choice">Space</span>
+                        </div>
+                        <button class="start">Begin session</button>
+                    </div>
+                    <div class="col-side">
+                        <div class="help">
+                            <b>How it works</b><br>
+                            Cards start face down. Turn over two at a time. When two cards match, they stay open.
+                            Find every pair to finish. Fewer moves means a better score.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="frame">
+            <div class="step">2 . Play with progress feedback</div>
+            <div class="window">
+                <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar">mindmatch . skilled . animals</span></div>
+                <div class="screen">
+                    <div class="col-main">
+                        <div class="board">
+                            <div class="bc up">🐶</div>
+                            <div class="bc">?</div>
+                            <div class="bc hit">🦁</div>
+                            <div class="bc">?</div>
+                            <div class="bc">?</div>
+                            <div class="bc hit">🦁</div>
+                            <div class="bc">?</div>
+                            <div class="bc up">🐸</div>
+                            <div class="bc hit">🐼</div>
+                            <div class="bc">?</div>
+                            <div class="bc hit">🐼</div>
+                            <div class="bc">?</div>
+                            <div class="bc">?</div>
+                            <div class="bc">?</div>
+                            <div class="bc">?</div>
+                            <div class="bc">?</div>
+                        </div>
+                    </div>
+                    <div class="col-side">
+                        <div class="panel">
+                            <div class="stat-line"><span>Pairs found</span><span class="v">3 / 8</span></div>
+                            <div class="stat-line"><span>Moves</span><span class="v">11</span></div>
+                            <div class="stat-line"><span>Time</span><span class="v">1:08</span></div>
+                            <div class="progress-track"><div class="progress-fill" style="width:37%;"></div></div>
+                            <div class="feedback">Two cards turned over. They do not match, turning back in a moment.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="frame">
+            <div class="step">3 . Session summary with trend</div>
+            <div class="window">
+                <div class="titlebar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="urlbar">mindmatch . session complete</span></div>
+                <div class="screen center">
+                    <div class="trophy">🏆</div>
+                    <h2 class="s" style="margin-top:8px;">Session complete</h2>
+                    <p class="s-sub">Skilled level . Animals theme</p>
+                    <div class="end-stats">
+                        <div><div class="ev">21</div><div class="el">Moves</div></div>
+                        <div><div class="ev">2:54</div><div class="el">Time</div></div>
+                        <div><div class="ev">18</div><div class="el">Best moves</div></div>
+                    </div>
+                    <p class="trend">Your move count improved from 26 last session to 21 today. Keep it up.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

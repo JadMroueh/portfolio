@@ -3,20 +3,669 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Memory Game - Coming Soon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>MindMatch - Memory Game</title>
+    <link rel="preconnect" href="https://esm.sh">
+    <style>
+        :root {
+            --bg: #0d1b2a;
+            --bg-2: #112640;
+            --panel: #132234;
+            --panel-2: #0d2235;
+            --line: #1e3a58;
+            --line-soft: #2a4060;
+            --text: #e8eaf0;
+            --muted: #7a9ab8;
+            --muted-2: #6a8aaa;
+            --amber: #e8a020;
+            --amber-dark: #d4911c;
+            --sky: #60b8e8;
+            --steel: #4a90c4;
+            --green: #10b89a;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: linear-gradient(160deg, #0d1b2a 0%, #0a1622 100%);
+            min-height: 100vh;
+        }
+
+        /* top bar */
+        .topbar {
+            background-color: #091220;
+            border-bottom: 2px solid var(--amber);
+            padding: 14px 0;
+        }
+        .topbar .inner {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .brand:hover { color: var(--amber); }
+        .back-link {
+            font-size: 14px;
+            color: var(--muted);
+            text-decoration: none;
+            border: 1px solid var(--line-soft);
+            padding: 7px 14px;
+        }
+        .back-link:hover {
+            color: var(--sky);
+            border-color: var(--sky);
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* headings */
+        h1.game-title {
+            font-size: 44px;
+            font-weight: bold;
+            color: #fff;
+            margin: 0 0 6px;
+            letter-spacing: 1px;
+        }
+        .game-title .accent { color: var(--amber); }
+        .tagline {
+            color: var(--muted);
+            font-size: 16px;
+            margin: 0 0 36px;
+        }
+        h2.panel-title {
+            font-size: 24px;
+            color: #fff;
+            margin: 0 0 4px;
+        }
+        .panel-sub {
+            color: var(--muted-2);
+            font-size: 14px;
+            margin: 0 0 22px;
+        }
+        .step-label {
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--amber);
+            margin: 0 0 12px;
+        }
+
+        /* setup card */
+        .setup {
+            background-color: var(--panel);
+            border: 1px solid var(--line);
+            border-top: 3px solid var(--amber);
+            padding: 34px;
+        }
+        .setup-block { margin-bottom: 30px; }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+        .option-grid.levels { grid-template-columns: repeat(3, 1fr); }
+
+        .option {
+            background-color: var(--panel-2);
+            border: 1px solid var(--line);
+            padding: 18px 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .15s, background-color .15s, transform .1s;
+            user-select: none;
+        }
+        .option:hover {
+            border-color: var(--line-soft);
+            background-color: #103050;
+        }
+        .option.selected {
+            border-color: var(--amber);
+            background-color: #1a2c44;
+            box-shadow: inset 0 0 0 1px var(--amber);
+        }
+        .option .emoji-row {
+            font-size: 26px;
+            margin-bottom: 8px;
+            letter-spacing: 4px;
+        }
+        .option .opt-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .option .opt-desc {
+            font-size: 12px;
+            color: var(--muted-2);
+            margin-top: 4px;
+        }
+
+        .start-btn {
+            display: inline-block;
+            background-color: var(--amber);
+            color: #111;
+            border: 2px solid var(--amber);
+            font-weight: bold;
+            font-size: 16px;
+            padding: 13px 40px;
+            cursor: pointer;
+            transition: background-color .15s, transform .1s;
+        }
+        .start-btn:hover { background-color: var(--amber-dark); border-color: var(--amber-dark); }
+        .start-btn:active { transform: translateY(1px); }
+
+        /* HUD */
+        .hud {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .stat {
+            background-color: var(--panel);
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--sky);
+            padding: 12px 18px;
+            min-width: 92px;
+        }
+        .stat .stat-label {
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted-2);
+            margin-bottom: 3px;
+        }
+        .stat .stat-value {
+            font-size: 22px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .stat.matches { border-left-color: var(--green); }
+        .stat.moves { border-left-color: var(--amber); }
+        .stat.timer { border-left-color: var(--sky); }
+
+        .hud-actions { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+        .ghost-btn {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--line-soft);
+            padding: 9px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .ghost-btn:hover { color: var(--sky); border-color: var(--sky); }
+
+        /* board */
+        .board {
+            display: grid;
+            gap: 14px;
+            justify-content: center;
+        }
+        .card-cell {
+            perspective: 700px;
+            aspect-ratio: 3 / 4;
+            cursor: pointer;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform .4s ease;
+        }
+        .card-cell.is-flipped .card-inner { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            border: 1px solid var(--line);
+        }
+        .card-back {
+            background: linear-gradient(150deg, #16304e 0%, #0f2138 100%);
+            border-color: var(--line-soft);
+        }
+        .card-back .logo {
+            font-size: 28px;
+            color: var(--amber);
+            opacity: .85;
+        }
+        .card-front {
+            background-color: #f3f6fb;
+            transform: rotateY(180deg);
+            font-size: 40px;
+        }
+        .card-cell.matched .card-front {
+            background-color: #d7f5ec;
+            border-color: var(--green);
+            box-shadow: inset 0 0 0 2px var(--green);
+        }
+
+        /* win screen */
+        .win {
+            background-color: var(--panel);
+            border: 1px solid var(--line);
+            border-top: 3px solid var(--green);
+            padding: 40px;
+            text-align: center;
+        }
+        .win .trophy { font-size: 56px; margin-bottom: 10px; }
+        .win h2 { font-size: 30px; color: #fff; margin: 0 0 8px; }
+        .win .win-sub { color: var(--muted); margin: 0 0 26px; }
+        .win-stats {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .win-stat .ws-value { font-size: 30px; font-weight: bold; color: var(--amber); }
+        .win-stat .ws-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted-2); }
+        .best-flag {
+            display: inline-block;
+            background-color: #1a3a2e;
+            color: var(--green);
+            border: 1px solid var(--green);
+            font-size: 13px;
+            font-weight: bold;
+            padding: 6px 16px;
+            margin-bottom: 26px;
+        }
+        .win-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+        /* footer note */
+        .foot-note {
+            text-align: center;
+            color: #3f5d7c;
+            font-size: 13px;
+            margin-top: 48px;
+        }
+
+        @media (max-width: 620px) {
+            h1.game-title { font-size: 34px; }
+            .setup { padding: 22px; }
+            .option-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .option { padding: 12px 6px; }
+            .option .emoji-row { font-size: 20px; letter-spacing: 2px; }
+            .option .opt-desc { display: none; }
+            .board { gap: 9px; }
+            .hud-actions { margin-left: 0; width: 100%; }
+        }
+
+        .loading { color: var(--muted); padding: 60px 0; text-align: center; }
+    </style>
 </head>
 <body>
-    <main class="hold-page">
-        <div class="container">
-            <div class="hold-box">
-                <h1>Memory Game</h1>
-                <p class="lead">Coming soon.</p>
-                <p>This page will later link to my memory game design.</p>
-                <a href="index.html" class="btn btn-dark">Back to portfolio</a>
-            </div>
+    <div class="topbar">
+        <div class="inner">
+            <a class="brand" href="index.html">Jad Mroueh</a>
+            <a class="back-link" href="index.html">Back to portfolio</a>
         </div>
-    </main>
+    </div>
+
+    <div id="root"><div class="wrap"><p class="loading">Loading MindMatch...</p></div></div>
+
+    <script type="module">
+        // Load React first (hard dependency, same idea as a CDN script tag).
+        const ReactMod = await import("https://esm.sh/react@18.3.1");
+        const React = ReactMod.default;
+        const { useState, useEffect, useRef, useCallback } = React;
+        const { createRoot } = await import("https://esm.sh/react-dom@18.3.1/client");
+
+        // Load Motion (motion/react) for animation. If the CDN ever fails to load,
+        // fall back to plain elements so the game still plays without animation.
+        let motion, AnimatePresence;
+        try {
+            const M = await import("https://esm.sh/motion@11.11.17/react?deps=react@18.3.1,react-dom@18.3.1");
+            motion = M.motion;
+            AnimatePresence = M.AnimatePresence;
+        } catch (err) {
+            const strip = (props) => {
+                if (!props) return props;
+                const { initial, animate, exit, transition, whileHover, whileTap, whileDrag, layout, layoutId, ...rest } = props;
+                return rest;
+            };
+            motion = new Proxy({}, { get: (_t, tag) => (props, ...kids) => React.createElement(tag, strip(props), ...kids) });
+            AnimatePresence = (props) => props.children;
+        }
+
+        const e = React.createElement;
+
+        // ---- game configuration data ----
+        const THEMES = {
+            animals: { name: "Animals", icons: ["🐶","🐱","🦊","🐼","🦁","🐸","🐵","🐷","🐰","🐨","🐯","🐮"], sample: ["🐶","🦊","🐼"] },
+            fruits:  { name: "Fruits",  icons: ["🍎","🍌","🍓","🍇","🍊","🍉","🍑","🍍","🥝","🍒","🥥","🍐"], sample: ["🍎","🍓","🍇"] },
+            space:   { name: "Space",   icons: ["🚀","🪐","🌙","⭐","☄️","🛸","👽","🌍","🔭","🌟","☀️","🌌"], sample: ["🚀","🪐","🌙"] }
+        };
+
+        const LEVELS = {
+            easy:   { name: "Beginner", pairs: 6,  cols: 4, desc: "12 cards" },
+            medium: { name: "Skilled",  pairs: 8,  cols: 4, desc: "16 cards" },
+            hard:   { name: "Expert",   pairs: 10, cols: 5, desc: "20 cards" }
+        };
+
+        // ---- helpers ----
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function buildDeck(themeKey, levelKey) {
+            const icons = THEMES[themeKey].icons.slice(0, LEVELS[levelKey].pairs);
+            const doubled = icons.flatMap((icon, i) => ([
+                { id: i + "-a", pairId: i, icon },
+                { id: i + "-b", pairId: i, icon }
+            ]));
+            return shuffle(doubled);
+        }
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+        }
+
+        function bestKey(themeKey, levelKey) {
+            return "mindmatch_best_" + themeKey + "_" + levelKey;
+        }
+
+        // ---- option button ----
+        function Option({ selected, onClick, emojiRow, name, desc }) {
+            return e(motion.div, {
+                className: "option" + (selected ? " selected" : ""),
+                onClick,
+                whileHover: { y: -2 },
+                whileTap: { scale: 0.97 }
+            },
+                e("div", { className: "emoji-row" }, emojiRow),
+                e("div", { className: "opt-name" }, name),
+                desc ? e("div", { className: "opt-desc" }, desc) : null
+            );
+        }
+
+        // ---- setup screen ----
+        function SetupScreen({ onStart }) {
+            const [theme, setTheme] = useState("animals");
+            const [level, setLevel] = useState("easy");
+
+            return e(motion.div, {
+                className: "setup",
+                initial: { opacity: 0, y: 16 },
+                animate: { opacity: 1, y: 0 },
+                exit: { opacity: 0, y: -16 },
+                transition: { duration: 0.25 }
+            },
+                e("h2", { className: "panel-title" }, "Set up your game"),
+                e("p", { className: "panel-sub" }, "Pick a card theme and a difficulty, then flip cards to find every matching pair."),
+
+                e("div", { className: "setup-block" },
+                    e("p", { className: "step-label" }, "1 . Choose a theme"),
+                    e("div", { className: "option-grid" },
+                        Object.entries(THEMES).map(([key, t]) =>
+                            e(Option, {
+                                key,
+                                selected: theme === key,
+                                onClick: () => setTheme(key),
+                                emojiRow: t.sample.join(" "),
+                                name: t.name
+                            })
+                        )
+                    )
+                ),
+
+                e("div", { className: "setup-block" },
+                    e("p", { className: "step-label" }, "2 . Choose a difficulty"),
+                    e("div", { className: "option-grid levels" },
+                        Object.entries(LEVELS).map(([key, lv]) =>
+                            e(Option, {
+                                key,
+                                selected: level === key,
+                                onClick: () => setLevel(key),
+                                emojiRow: lv.name === "Beginner" ? "🟢" : lv.name === "Skilled" ? "🟡" : "🔴",
+                                name: lv.name,
+                                desc: lv.desc
+                            })
+                        )
+                    )
+                ),
+
+                e(motion.button, {
+                    className: "start-btn",
+                    onClick: () => onStart(theme, level),
+                    whileTap: { scale: 0.96 }
+                }, "Start game")
+            );
+        }
+
+        // ---- single card ----
+        // The flip is CSS-driven (via the is-flipped class) so it works even if
+        // the animation library is unavailable.
+        function Card({ card, flipped, matched, onClick }) {
+            const isUp = flipped || matched;
+            return e("div", {
+                className: "card-cell" + (matched ? " matched" : "") + (isUp ? " is-flipped" : ""),
+                onClick
+            },
+                e("div", { className: "card-inner" },
+                    e("div", { className: "card-face card-back" }, e("span", { className: "logo" }, "✦")),
+                    e("div", { className: "card-face card-front" }, card.icon)
+                )
+            );
+        }
+
+        // ---- game board screen ----
+        function GameScreen({ themeKey, levelKey, onWin, onQuit }) {
+            const [deck, setDeck] = useState(() => buildDeck(themeKey, levelKey));
+            const [flipped, setFlipped] = useState([]);       // indexes currently face up (max 2)
+            const [matched, setMatched] = useState([]);        // pairIds solved
+            const [moves, setMoves] = useState(0);
+            const [seconds, setSeconds] = useState(0);
+            const [locked, setLocked] = useState(false);
+            const timerRef = useRef(null);
+
+            const cols = LEVELS[levelKey].cols;
+            const totalPairs = LEVELS[levelKey].pairs;
+
+            // timer
+            useEffect(() => {
+                timerRef.current = setInterval(() => setSeconds(s => s + 1), 1000);
+                return () => clearInterval(timerRef.current);
+            }, []);
+
+            // win check
+            useEffect(() => {
+                if (matched.length === totalPairs) {
+                    clearInterval(timerRef.current);
+                    const t = setTimeout(() => onWin({ moves, seconds }), 650);
+                    return () => clearTimeout(t);
+                }
+            }, [matched, totalPairs, moves, seconds, onWin]);
+
+            const handleFlip = useCallback((index) => {
+                if (locked) return;
+                if (flipped.includes(index)) return;
+                if (matched.includes(deck[index].pairId)) return;
+
+                const next = [...flipped, index];
+                setFlipped(next);
+
+                if (next.length === 2) {
+                    setMoves(m => m + 1);
+                    setLocked(true);
+                    const [a, b] = next;
+                    if (deck[a].pairId === deck[b].pairId) {
+                        setTimeout(() => {
+                            setMatched(prev => [...prev, deck[a].pairId]);
+                            setFlipped([]);
+                            setLocked(false);
+                        }, 450);
+                    } else {
+                        setTimeout(() => {
+                            setFlipped([]);
+                            setLocked(false);
+                        }, 850);
+                    }
+                }
+            }, [locked, flipped, matched, deck]);
+
+            return e(motion.div, {
+                initial: { opacity: 0 },
+                animate: { opacity: 1 },
+                exit: { opacity: 0 }
+            },
+                e("div", { className: "hud" },
+                    e("div", { className: "stat matches" },
+                        e("div", { className: "stat-label" }, "Pairs"),
+                        e("div", { className: "stat-value" }, matched.length + " / " + totalPairs)
+                    ),
+                    e("div", { className: "stat moves" },
+                        e("div", { className: "stat-label" }, "Moves"),
+                        e("div", { className: "stat-value" }, moves)
+                    ),
+                    e("div", { className: "stat timer" },
+                        e("div", { className: "stat-label" }, "Time"),
+                        e("div", { className: "stat-value" }, formatTime(seconds))
+                    ),
+                    e("div", { className: "hud-actions" },
+                        e("button", { className: "ghost-btn", onClick: onQuit }, "New setup")
+                    )
+                ),
+
+                e("div", {
+                    className: "board",
+                    style: { gridTemplateColumns: "repeat(" + cols + ", minmax(54px, 90px))" }
+                },
+                    deck.map((card, i) =>
+                        e(Card, {
+                            key: card.id,
+                            card,
+                            flipped: flipped.includes(i),
+                            matched: matched.includes(card.pairId),
+                            onClick: () => handleFlip(i)
+                        })
+                    )
+                )
+            );
+        }
+
+        // ---- win screen ----
+        function WinScreen({ result, themeKey, levelKey, onReplay, onSetup }) {
+            const [best, setBest] = useState(null);
+            const [isNewBest, setIsNewBest] = useState(false);
+
+            useEffect(() => {
+                const key = bestKey(themeKey, levelKey);
+                let stored = null;
+                try { stored = JSON.parse(localStorage.getItem(key)); } catch (err) {}
+                const score = result.moves; // fewer moves is better, tie-break by time
+                let newBest = false;
+                if (!stored || score < stored.moves || (score === stored.moves && result.seconds < stored.seconds)) {
+                    const record = { moves: result.moves, seconds: result.seconds };
+                    try { localStorage.setItem(key, JSON.stringify(record)); } catch (err) {}
+                    setBest(record);
+                    newBest = true;
+                } else {
+                    setBest(stored);
+                }
+                setIsNewBest(newBest);
+            }, [result, themeKey, levelKey]);
+
+            return e(motion.div, {
+                className: "win",
+                initial: { opacity: 0, scale: 0.95 },
+                animate: { opacity: 1, scale: 1 },
+                transition: { duration: 0.3 }
+            },
+                e(motion.div, {
+                    className: "trophy",
+                    initial: { rotate: -12, scale: 0.6 },
+                    animate: { rotate: 0, scale: 1 },
+                    transition: { type: "spring", stiffness: 220, damping: 12 }
+                }, "🏆"),
+                e("h2", null, "All pairs matched"),
+                e("p", { className: "win-sub" },
+                    THEMES[themeKey].name + " . " + LEVELS[levelKey].name + " level"),
+
+                e("div", { className: "win-stats" },
+                    e("div", { className: "win-stat" },
+                        e("div", { className: "ws-value" }, result.moves),
+                        e("div", { className: "ws-label" }, "Moves")
+                    ),
+                    e("div", { className: "win-stat" },
+                        e("div", { className: "ws-value" }, formatTime(result.seconds)),
+                        e("div", { className: "ws-label" }, "Time")
+                    ),
+                    best ? e("div", { className: "win-stat" },
+                        e("div", { className: "ws-value" }, best.moves),
+                        e("div", { className: "ws-label" }, "Best moves")
+                    ) : null
+                ),
+
+                isNewBest ? e("div", { className: "best-flag" }, "★ New personal best") : null,
+
+                e("div", { className: "win-actions" },
+                    e(motion.button, { className: "start-btn", onClick: onReplay, whileTap: { scale: 0.96 } }, "Play again"),
+                    e("button", { className: "ghost-btn", onClick: onSetup }, "Change settings")
+                )
+            );
+        }
+
+        // ---- root app: screen state machine ----
+        function App() {
+            const [screen, setScreen] = useState("setup"); // setup | game | win
+            const [config, setConfig] = useState({ theme: "animals", level: "easy" });
+            const [result, setResult] = useState(null);
+            const [gameKey, setGameKey] = useState(0);
+
+            const start = (theme, level) => {
+                setConfig({ theme, level });
+                setScreen("game");
+                setGameKey(k => k + 1);
+            };
+            const win = (res) => { setResult(res); setScreen("win"); };
+            const replay = () => { setScreen("game"); setGameKey(k => k + 1); };
+            const toSetup = () => setScreen("setup");
+
+            return e("div", null,
+                e("div", { className: "wrap" },
+                    e("h1", { className: "game-title" }, "Mind", e("span", { className: "accent" }, "Match")),
+                    e("p", { className: "tagline" }, "Flip the cards, hold them in mind, and find every matching pair."),
+
+                    e(AnimatePresence, { mode: "wait" },
+                        screen === "setup"
+                            ? e(SetupScreen, { key: "setup", onStart: start })
+                            : screen === "game"
+                                ? e(GameScreen, { key: "game-" + gameKey, themeKey: config.theme, levelKey: config.level, onWin: win, onQuit: toSetup })
+                                : e(WinScreen, { key: "win", result, themeKey: config.theme, levelKey: config.level, onReplay: replay, onSetup: toSetup })
+                    ),
+
+                    e("p", { className: "foot-note" }, "MindMatch . SEG3125 Assignment 3 . Built with React")
+                )
+            );
+        }
+
+        createRoot(document.getElementById("root")).render(e(App));
+    </script>
 </body>
 </html>
