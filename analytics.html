@@ -3,20 +3,704 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Analytics Site - Coming Soon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <title>PriceScope - Grocery Price Dashboard</title>
+    <link rel="preconnect" href="https://esm.sh">
+    <style>
+        :root {
+            --bg: #0d1b2a;
+            --panel: #132234;
+            --panel-2: #0d2235;
+            --line: #1e3a58;
+            --line-soft: #2a4060;
+            --text: #e8eaf0;
+            --muted: #7a9ab8;
+            --amber: #e8a020;
+            --amber-chart: #c48618;
+            --steel: #4a90c4;
+            --sky: #60b8e8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: linear-gradient(160deg, #0d1b2a 0%, #0a1622 100%);
+            min-height: 100vh;
+        }
+
+        /* top bar */
+        .topbar {
+            background-color: #091220;
+            border-bottom: 2px solid var(--amber);
+            padding: 14px 0;
+        }
+        .topbar .inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .brand {
+            font-weight: bold;
+            font-size: 18px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .brand:hover { color: var(--amber); }
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .back-link {
+            font-size: 14px;
+            color: var(--muted);
+            text-decoration: none;
+        }
+        .back-link:hover { color: var(--amber); }
+
+        /* language switcher */
+        .lang-switch {
+            display: flex;
+            border: 1px solid var(--line-soft);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .lang-switch button {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 14px;
+            padding: 6px 14px;
+            cursor: pointer;
+        }
+        .lang-switch button:hover { color: var(--text); }
+        .lang-switch button.active {
+            background: var(--amber);
+            color: #10202e;
+            font-weight: bold;
+        }
+
+        /* page layout */
+        .wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 20px 60px;
+        }
+        .page-head h1 {
+            margin: 0 0 6px;
+            font-size: 30px;
+        }
+        .page-head h1 span { color: var(--amber); }
+        .page-head .intro {
+            margin: 0 0 10px;
+            color: var(--muted);
+            font-size: 15px;
+            max-width: 760px;
+            line-height: 1.55;
+        }
+        .data-note {
+            display: inline-block;
+            background: rgba(232, 160, 32, 0.12);
+            border: 1px solid rgba(232, 160, 32, 0.45);
+            color: var(--amber);
+            border-radius: 6px;
+            font-size: 13px;
+            padding: 6px 12px;
+            margin-bottom: 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+        @media (max-width: 900px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 20px 20px 16px;
+        }
+        .panel h2 {
+            margin: 0 0 4px;
+            font-size: 19px;
+        }
+        .panel .context {
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+
+        /* controls */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 14px;
+            align-items: flex-end;
+        }
+        .control label {
+            display: block;
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .control select {
+            background: var(--panel-2);
+            color: var(--text);
+            border: 1px solid var(--line-soft);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 7px 10px;
+            min-width: 150px;
+        }
+        .control select:focus {
+            outline: 2px solid var(--amber);
+            outline-offset: 1px;
+        }
+        .seg {
+            display: flex;
+            border: 1px solid var(--line-soft);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .seg button {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 13px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        .seg button:hover { color: var(--text); }
+        .seg button.active {
+            background: var(--steel);
+            color: #0b1826;
+            font-weight: bold;
+        }
+
+        .chart-box {
+            position: relative;
+            height: 340px;
+        }
+
+        .kpis {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin: 22px 0;
+        }
+        @media (max-width: 700px) {
+            .kpis { grid-template-columns: 1fr; }
+        }
+        .kpi {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 14px 18px;
+        }
+        .kpi .kpi-label {
+            font-size: 12.5px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+        .kpi .kpi-value {
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .kpi .kpi-sub {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .foot {
+            margin-top: 30px;
+            border-top: 1px solid var(--line);
+            padding-top: 16px;
+            color: var(--muted);
+            font-size: 12.5px;
+            line-height: 1.6;
+        }
+        .foot a { color: var(--sky); }
+    </style>
 </head>
 <body>
-    <main class="hold-page">
-        <div class="container">
-            <div class="hold-box">
-                <h1>Analytics Site</h1>
-                <p class="lead">Coming soon.</p>
-                <p>This page will later link to my analytics dashboard design.</p>
-                <a href="index.html" class="btn btn-dark">Back to portfolio</a>
-            </div>
-        </div>
-    </main>
+    <div id="root"></div>
+
+    <script type="module">
+        const ReactMod = await import("https://esm.sh/react@18.3.1");
+        const React = ReactMod.default;
+        const { useState, useEffect, useRef, useMemo } = React;
+        const { createRoot } = await import("https://esm.sh/react-dom@18.3.1/client");
+        const { Chart } = await import("https://esm.sh/chart.js@4.4.3/auto");
+
+        const e = React.createElement;
+
+        /* ------------------------------------------------------------------
+           DATA
+           Illustrative quarterly average retail prices (CAD), modeled by hand
+           on the shape of Statistics Canada's "Monthly average retail prices
+           for selected products" (Table 18-10-0245-01). Values are
+           approximations for a course project, not official figures.
+        ------------------------------------------------------------------- */
+        const QUARTERS = [
+            "2021-01", "2021-04", "2021-07", "2021-10",
+            "2022-01", "2022-04", "2022-07", "2022-10",
+            "2023-01", "2023-04", "2023-07", "2023-10",
+            "2024-01", "2024-04", "2024-07", "2024-10",
+            "2025-01", "2025-04"
+        ];
+
+        const ITEMS = [
+            {
+                id: "chicken",
+                name: { en: "Chicken breast", fr: "Poitrine de poulet" },
+                unit: { en: "per kg", fr: "le kg" },
+                prices: [12.86, 13.10, 13.25, 13.60, 14.20, 14.85, 15.30, 15.10,
+                         15.40, 15.20, 14.95, 15.05, 15.30, 15.55, 15.70, 15.90, 16.10, 16.25]
+            },
+            {
+                id: "beef",
+                name: { en: "Ground beef", fr: "Bœuf haché" },
+                unit: { en: "per kg", fr: "le kg" },
+                prices: [10.90, 11.20, 11.45, 11.60, 11.95, 12.40, 12.30, 12.10,
+                         12.35, 12.60, 12.85, 13.10, 13.40, 13.85, 14.20, 14.05, 14.30, 14.45]
+            },
+            {
+                id: "milk",
+                name: { en: "Milk, 4 L", fr: "Lait, 4 L" },
+                unit: { en: "per 4 L", fr: "les 4 L" },
+                prices: [5.85, 5.90, 5.95, 6.05, 6.25, 6.55, 6.70, 6.80,
+                         6.95, 7.00, 6.95, 7.05, 7.10, 7.15, 7.20, 7.25, 7.30, 7.35]
+            },
+            {
+                id: "eggs",
+                name: { en: "Eggs, 1 dozen", fr: "Œufs, 1 douzaine" },
+                unit: { en: "per dozen", fr: "la douzaine" },
+                prices: [3.55, 3.60, 3.65, 3.75, 3.90, 4.10, 4.35, 4.60,
+                         4.85, 4.75, 4.70, 4.80, 4.90, 5.00, 5.05, 5.10, 5.20, 5.25]
+            },
+            {
+                id: "bread",
+                name: { en: "White bread, 675 g", fr: "Pain blanc, 675 g" },
+                unit: { en: "per loaf", fr: "le pain" },
+                prices: [2.85, 2.90, 2.95, 3.05, 3.20, 3.40, 3.55, 3.65,
+                         3.70, 3.75, 3.70, 3.65, 3.70, 3.75, 3.80, 3.85, 3.90, 3.95]
+            },
+            {
+                id: "tomatoes",
+                name: { en: "Tomatoes", fr: "Tomates" },
+                unit: { en: "per kg", fr: "le kg" },
+                prices: [4.10, 3.60, 3.40, 4.05, 4.60, 4.05, 3.85, 4.50,
+                         5.10, 4.40, 4.15, 4.90, 5.30, 4.60, 4.35, 5.05, 5.45, 4.75]
+            }
+        ];
+
+        const YEARS = [2021, 2022, 2023, 2024, 2025];
+
+        /* ------------------------------------------------------------------
+           TRANSLATIONS (resource-file style string table)
+        ------------------------------------------------------------------- */
+        const STR = {
+            en: {
+                htmlLang: "en",
+                docTitle: "PriceScope - Grocery Price Dashboard",
+                back: "Back to portfolio",
+                title1: "PriceScope",
+                title2: "Grocery prices in Canada",
+                intro: "This dashboard tracks the average retail price of six everyday grocery items across Canada from 2021 to 2025. Use the menus to follow one item over time, compare it with another, and rank all items for a given year.",
+                dataNote: "Synthetic data: values are illustrative, modeled on Statistics Canada average retail food prices. They are not official figures.",
+                kpiBasket: "Basket of 6 items",
+                kpiBasketSub: "latest quarter, combined",
+                kpiRise: "Biggest 5-year increase",
+                kpiSince: "since early 2021",
+                kpiAvg: "Average basket increase",
+                kpiAvgSub: "2021 to 2025, all 6 items",
+                trendTitle: "Price trend",
+                trendContext: "How the price of one item moved quarter by quarter. Pick an item, and add a second one to compare their paths.",
+                itemLabel: "Item",
+                compareLabel: "Compare with",
+                compareNone: "Nothing",
+                rangeLabel: "Period",
+                rangeAll: "Since 2021",
+                range2y: "Last 2 years",
+                compareTitle: "Price ranking",
+                compareContext: "The same six items ranked side by side for one year, so the expensive staples stand out. Choose the year and the sort order.",
+                yearLabel: "Year",
+                sortLabel: "Sort",
+                sortPrice: "By price",
+                sortName: "A to Z",
+                yAxis: "Average price (CAD)",
+                tooltipUnit: (u) => u,
+                footSource: "Data: synthetic values modeled on Statistics Canada, Monthly average retail prices for selected products (Table 18-10-0245-01).",
+                footBuilt: "PriceScope . SEG3125 Assignment 5 . Built with React and Chart.js by Jad Mroueh."
+            },
+            fr: {
+                htmlLang: "fr",
+                docTitle: "PriceScope - Tableau de bord des prix d'épicerie",
+                back: "Retour au portfolio",
+                title1: "PriceScope",
+                title2: "Prix d'épicerie au Canada",
+                intro: "Ce tableau de bord suit le prix de détail moyen de six produits d'épicerie courants au Canada, de 2021 à 2025. Utilisez les menus pour suivre un produit dans le temps, le comparer à un autre et classer tous les produits pour une année donnée.",
+                dataNote: "Données synthétiques : les valeurs sont illustratives, inspirées des prix de détail moyens des aliments de Statistique Canada. Ce ne sont pas des chiffres officiels.",
+                kpiBasket: "Panier de 6 produits",
+                kpiBasketSub: "dernier trimestre, au total",
+                kpiRise: "Plus forte hausse en 5 ans",
+                kpiSince: "depuis le début de 2021",
+                kpiAvg: "Hausse moyenne du panier",
+                kpiAvgSub: "de 2021 à 2025, les 6 produits",
+                trendTitle: "Évolution du prix",
+                trendContext: "L'évolution trimestrielle du prix d'un produit. Choisissez un produit, puis ajoutez-en un deuxième pour comparer leurs trajectoires.",
+                itemLabel: "Produit",
+                compareLabel: "Comparer avec",
+                compareNone: "Aucun",
+                rangeLabel: "Période",
+                rangeAll: "Depuis 2021",
+                range2y: "2 dernières années",
+                compareTitle: "Classement des prix",
+                compareContext: "Les six mêmes produits classés côte à côte pour une année, afin de faire ressortir les produits les plus chers. Choisissez l'année et l'ordre de tri.",
+                yearLabel: "Année",
+                sortLabel: "Tri",
+                sortPrice: "Par prix",
+                sortName: "De A à Z",
+                yAxis: "Prix moyen ($ CA)",
+                tooltipUnit: (u) => u,
+                footSource: "Données : valeurs synthétiques inspirées de Statistique Canada, Prix de détail moyens mensuels de produits choisis (tableau 18-10-0245-01).",
+                footBuilt: "PriceScope . SEG3125 Devoir 5 . Réalisé avec React et Chart.js par Jad Mroueh."
+            }
+        };
+
+        /* localized formatters */
+        const locale = (lang) => lang === "fr" ? "fr-CA" : "en-CA";
+        const money = (lang, v) => new Intl.NumberFormat(locale(lang), {
+            style: "currency", currency: "CAD",
+            minimumFractionDigits: 2, maximumFractionDigits: 2
+        }).format(v);
+        const pct = (lang, v) => new Intl.NumberFormat(locale(lang), {
+            style: "percent", minimumFractionDigits: 0, maximumFractionDigits: 0
+        }).format(v);
+        const quarterLabel = (lang, q) => {
+            const [y, m] = q.split("-").map(Number);
+            return new Intl.DateTimeFormat(locale(lang), { month: "short", year: "numeric" })
+                .format(new Date(y, m - 1, 1));
+        };
+
+        const yearlyAvg = (item, year) => {
+            const vals = QUARTERS
+                .map((q, i) => ({ q, v: item.prices[i] }))
+                .filter(({ q }) => q.startsWith(String(year)))
+                .map(({ v }) => v);
+            return vals.reduce((a, b) => a + b, 0) / vals.length;
+        };
+
+        /* chart palette validated for the dark panel surface #132234 */
+        const SERIES_1 = "#c48618";
+        const SERIES_2 = "#4a90c4";
+        const GRID = "rgba(122, 154, 184, 0.16)";
+        const TICK = "#7a9ab8";
+
+        Chart.defaults.font.family = "Arial, Helvetica, sans-serif";
+        Chart.defaults.color = TICK;
+
+        /* ------------------------------------------------------------------
+           LINE CHART: price trend for one item, optional second item
+        ------------------------------------------------------------------- */
+        function TrendChart({ lang, itemId, compareId, range }) {
+            const canvasRef = useRef(null);
+            const chartRef = useRef(null);
+            const t = STR[lang];
+
+            useEffect(() => {
+                const item = ITEMS.find(i => i.id === itemId);
+                const cmp = compareId ? ITEMS.find(i => i.id === compareId) : null;
+                const start = range === "2y" ? QUARTERS.length - 8 : 0;
+                const labels = QUARTERS.slice(start).map(q => quarterLabel(lang, q));
+
+                const mkSet = (it, color) => ({
+                    label: `${it.name[lang]} (${it.unit[lang]})`,
+                    data: it.prices.slice(start),
+                    borderColor: color,
+                    backgroundColor: color,
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.25
+                });
+
+                const datasets = [mkSet(item, SERIES_1)];
+                if (cmp) datasets.push(mkSet(cmp, SERIES_2));
+
+                if (chartRef.current) chartRef.current.destroy();
+                chartRef.current = new Chart(canvasRef.current, {
+                    type: "line",
+                    data: { labels, datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: "index", intersect: false },
+                        plugins: {
+                            legend: {
+                                display: datasets.length > 1,
+                                labels: { boxWidth: 14, boxHeight: 3 }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `${ctx.dataset.label}: ${money(lang, ctx.parsed.y)}`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { maxRotation: 45 } },
+                            y: {
+                                title: { display: true, text: t.yAxis },
+                                grid: { color: GRID },
+                                ticks: { callback: (v) => money(lang, v) }
+                            }
+                        }
+                    }
+                });
+                return () => { if (chartRef.current) chartRef.current.destroy(); chartRef.current = null; };
+            }, [lang, itemId, compareId, range]);
+
+            return e("div", { className: "chart-box" },
+                e("canvas", { ref: canvasRef, role: "img", "aria-label": t.trendTitle }));
+        }
+
+        /* ------------------------------------------------------------------
+           BAR CHART: yearly average of every item, sortable
+        ------------------------------------------------------------------- */
+        function RankChart({ lang, year, sort, highlightId }) {
+            const canvasRef = useRef(null);
+            const chartRef = useRef(null);
+            const t = STR[lang];
+
+            useEffect(() => {
+                let rows = ITEMS.map(it => ({
+                    id: it.id,
+                    label: it.name[lang],
+                    unit: it.unit[lang],
+                    value: yearlyAvg(it, year)
+                }));
+                rows = sort === "name"
+                    ? rows.sort((a, b) => a.label.localeCompare(b.label, locale(lang)))
+                    : rows.sort((a, b) => b.value - a.value);
+
+                if (chartRef.current) chartRef.current.destroy();
+                chartRef.current = new Chart(canvasRef.current, {
+                    type: "bar",
+                    data: {
+                        labels: rows.map(r => r.label),
+                        datasets: [{
+                            data: rows.map(r => r.value),
+                            backgroundColor: rows.map(r => r.id === highlightId ? SERIES_1 : SERIES_2),
+                            borderRadius: 4,
+                            maxBarThickness: 46
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: (ctx) => `${money(lang, ctx.parsed.y)} ${rows[ctx.dataIndex].unit}`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { maxRotation: 45 } },
+                            y: {
+                                title: { display: true, text: t.yAxis },
+                                grid: { color: GRID },
+                                ticks: { callback: (v) => money(lang, v) }
+                            }
+                        }
+                    }
+                });
+                return () => { if (chartRef.current) chartRef.current.destroy(); chartRef.current = null; };
+            }, [lang, year, sort, highlightId]);
+
+            return e("div", { className: "chart-box" },
+                e("canvas", { ref: canvasRef, role: "img", "aria-label": t.compareTitle }));
+        }
+
+        /* ------------------------------------------------------------------
+           APP
+        ------------------------------------------------------------------- */
+        function App() {
+            const [lang, setLang] = useState(
+                new URLSearchParams(window.location.search).get("lang") === "fr" ? "fr" : "en");
+            const [itemId, setItemId] = useState("chicken");
+            const [compareId, setCompareId] = useState("");
+            const [range, setRange] = useState("all");
+            const [year, setYear] = useState(2025);
+            const [sort, setSort] = useState("price");
+            const t = STR[lang];
+
+            useEffect(() => {
+                document.documentElement.lang = t.htmlLang;
+                document.title = t.docTitle;
+            }, [lang]);
+
+            const kpis = useMemo(() => {
+                const last = QUARTERS.length - 1;
+                const basketNow = ITEMS.reduce((s, it) => s + it.prices[last], 0);
+                const changes = ITEMS.map(it => ({
+                    name: it.name, change: (it.prices[last] - it.prices[0]) / it.prices[0]
+                }));
+                const biggest = changes.reduce((a, b) => a.change > b.change ? a : b);
+                const avg = changes.reduce((s, c) => s + c.change, 0) / changes.length;
+                return { basketNow, biggest, avg };
+            }, []);
+
+            const itemOptions = ITEMS.map(it =>
+                e("option", { key: it.id, value: it.id }, it.name[lang]));
+
+            return e("div", null,
+                e("header", { className: "topbar" },
+                    e("div", { className: "inner" },
+                        e("a", { className: "brand", href: "index.html" }, "Jad Mroueh"),
+                        e("div", { className: "topbar-right" },
+                            e("nav", { className: "lang-switch", "aria-label": "Language selection / Sélection de la langue" },
+                                e("button", {
+                                    className: lang === "en" ? "active" : "",
+                                    lang: "en",
+                                    "aria-pressed": lang === "en",
+                                    onClick: () => setLang("en")
+                                }, "English"),
+                                e("button", {
+                                    className: lang === "fr" ? "active" : "",
+                                    lang: "fr",
+                                    "aria-pressed": lang === "fr",
+                                    onClick: () => setLang("fr")
+                                }, "Français")
+                            ),
+                            e("a", { className: "back-link", href: "index.html" }, t.back)
+                        )
+                    )
+                ),
+                e("main", { className: "wrap" },
+                    e("div", { className: "page-head" },
+                        e("h1", null, e("span", null, t.title1), " · ", t.title2),
+                        e("p", { className: "intro" }, t.intro),
+                        e("p", { className: "data-note" }, "⚠ ", t.dataNote)
+                    ),
+                    e("div", { className: "kpis" },
+                        e("div", { className: "kpi" },
+                            e("div", { className: "kpi-label" }, t.kpiBasket),
+                            e("div", { className: "kpi-value" }, money(lang, kpis.basketNow)),
+                            e("div", { className: "kpi-sub" }, t.kpiBasketSub)
+                        ),
+                        e("div", { className: "kpi" },
+                            e("div", { className: "kpi-label" }, t.kpiRise),
+                            e("div", { className: "kpi-value" }, "+", pct(lang, kpis.biggest.change)),
+                            e("div", { className: "kpi-sub" }, kpis.biggest.name[lang], ", ", t.kpiSince)
+                        ),
+                        e("div", { className: "kpi" },
+                            e("div", { className: "kpi-label" }, t.kpiAvg),
+                            e("div", { className: "kpi-value" }, "+", pct(lang, kpis.avg)),
+                            e("div", { className: "kpi-sub" }, t.kpiAvgSub)
+                        )
+                    ),
+                    e("div", { className: "grid" },
+                        e("section", { className: "panel", "aria-label": t.trendTitle },
+                            e("h2", null, t.trendTitle),
+                            e("p", { className: "context" }, t.trendContext),
+                            e("div", { className: "controls" },
+                                e("div", { className: "control" },
+                                    e("label", { htmlFor: "trend-item" }, t.itemLabel),
+                                    e("select", {
+                                        id: "trend-item", value: itemId,
+                                        onChange: (ev) => {
+                                            setItemId(ev.target.value);
+                                            if (ev.target.value === compareId) setCompareId("");
+                                        }
+                                    }, itemOptions)
+                                ),
+                                e("div", { className: "control" },
+                                    e("label", { htmlFor: "trend-compare" }, t.compareLabel),
+                                    e("select", {
+                                        id: "trend-compare", value: compareId,
+                                        onChange: (ev) => setCompareId(ev.target.value)
+                                    },
+                                        e("option", { value: "" }, t.compareNone),
+                                        ITEMS.filter(it => it.id !== itemId).map(it =>
+                                            e("option", { key: it.id, value: it.id }, it.name[lang]))
+                                    )
+                                ),
+                                e("div", { className: "control" },
+                                    e("label", { id: "range-label" }, t.rangeLabel),
+                                    e("div", { className: "seg", role: "group", "aria-labelledby": "range-label" },
+                                        e("button", {
+                                            className: range === "all" ? "active" : "",
+                                            "aria-pressed": range === "all",
+                                            onClick: () => setRange("all")
+                                        }, t.rangeAll),
+                                        e("button", {
+                                            className: range === "2y" ? "active" : "",
+                                            "aria-pressed": range === "2y",
+                                            onClick: () => setRange("2y")
+                                        }, t.range2y)
+                                    )
+                                )
+                            ),
+                            e(TrendChart, { lang, itemId, compareId: compareId || null, range })
+                        ),
+                        e("section", { className: "panel", "aria-label": t.compareTitle },
+                            e("h2", null, t.compareTitle),
+                            e("p", { className: "context" }, t.compareContext),
+                            e("div", { className: "controls" },
+                                e("div", { className: "control" },
+                                    e("label", { htmlFor: "rank-year" }, t.yearLabel),
+                                    e("select", {
+                                        id: "rank-year", value: year,
+                                        onChange: (ev) => setYear(Number(ev.target.value))
+                                    }, YEARS.map(y => e("option", { key: y, value: y }, y)))
+                                ),
+                                e("div", { className: "control" },
+                                    e("label", { id: "sort-label" }, t.sortLabel),
+                                    e("div", { className: "seg", role: "group", "aria-labelledby": "sort-label" },
+                                        e("button", {
+                                            className: sort === "price" ? "active" : "",
+                                            "aria-pressed": sort === "price",
+                                            onClick: () => setSort("price")
+                                        }, t.sortPrice),
+                                        e("button", {
+                                            className: sort === "name" ? "active" : "",
+                                            "aria-pressed": sort === "name",
+                                            onClick: () => setSort("name")
+                                        }, t.sortName)
+                                    )
+                                )
+                            ),
+                            e(RankChart, { lang, year, sort, highlightId: itemId })
+                        )
+                    ),
+                    e("footer", { className: "foot" },
+                        e("p", null, t.footSource),
+                        e("p", null, t.footBuilt)
+                    )
+                )
+            );
+        }
+
+        createRoot(document.getElementById("root")).render(e(App));
+    </script>
 </body>
 </html>
